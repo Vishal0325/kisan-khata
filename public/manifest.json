@@ -1,0 +1,64 @@
+{
+    "name": "Kisan Khata - Digital Farm Credit Management",
+    "short_name": "KisanKhata",
+    "description": "Digital credit and transaction management system for farmers and vendors",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "orientation": "portrait-primary",
+    "theme_color": "#059669",
+    "background_color": "#ffffff",
+    "screenshots": [
+        {
+            "src": "/icon.svg",
+            "sizes": "512x512",
+            "type": "image/svg+xml"
+        }
+    ],
+    "icons": [
+        {
+            "src": "/icon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any"
+        },
+        {
+            "src": "/icon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "maskable"
+        }
+    ],
+    "categories": [
+        "productivity",
+        "business"
+    ],
+    "shortcuts": [
+        {
+            "name": "Farmers",
+            "short_name": "Farmers",
+            "description": "Manage farmer accounts and credits",
+            "url": "/farmers",
+            "icons": [
+                {
+                    "src": "/icon.svg",
+                    "sizes": "any",
+                    "type": "image/svg+xml"
+                }
+            ]
+        },
+        {
+            "name": "Vendors",
+            "short_name": "Vendors",
+            "description": "Manage vendor accounts and transactions",
+            "url": "/vendors",
+            "icons": [
+                {
+                    "src": "/icon.svg",
+                    "sizes": "any",
+                    "type": "image/svg+xml"
+                }
+            ]
+        }
+    ]
+}
