@@ -366,6 +366,36 @@ export async function getUserById(id: string): Promise<User | null> {
   return data as User;
 }
 
+export async function authenticateUser(
+  mobile_number: string,
+  pin: string
+): Promise<User | null> {
+  const supabase = getSupabase();
+  if (!supabase) {
+    console.error("[DB] Supabase client not configured");
+    return null;
+  }
+
+  const { data, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("mobile_number", mobile_number)
+    .eq("pin", pin)
+    .single();
+
+  if (error) {
+    console.error("[DB] Authentication query error:", {
+      code: error.code,
+      message: error.message,
+      details: error.details,
+      hint: error.hint,
+    });
+    return null;
+  }
+
+  return data as User;
+}
+
 export async function createUser(
   name: string,
   mobile_number: string,
@@ -373,28 +403,23 @@ export async function createUser(
 ): Promise<User> {
   const supabase = getSupabase();
   if (!supabase) throw new Error("Database not configured");
+
   const { data, error } = await supabase
     .from("users")
     .insert({ name, mobile_number, pin })
     .select("*")
     .single();
-  if (error) throw new Error(`Failed to create user: ${error.message}`);
-  return data as User;
-}
 
-export async function authenticateUser(
-  mobile_number: string,
-  pin: string
-): Promise<User | null> {
-  const supabase = getSupabase();
-  if (!supabase) return null;
-  const { data, error } = await supabase
-    .from("users")
-    .select("*")
-    .eq("mobile_number", mobile_number)
-    .eq("pin", pin)
-    .single();
-  if (error) return null;
+  if (error) {
+    console.error("[DB] Create user error:", {
+      code: error.code,
+      message: error.message,
+      details: error.details,
+      hint: error.hint,
+    });
+    throw new Error(`Failed to create user: ${error.message}`);
+  }
+
   return data as User;
 }
 export async function deleteVendorTransaction(id: string) {

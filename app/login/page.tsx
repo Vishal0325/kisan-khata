@@ -13,40 +13,62 @@ export default function LoginPage() {
     const [error, setError] = useState<string | null>(null);
     const [signupMode, setSignupMode] = useState(false);
     const [name, setName] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
-        const user = await authenticateUser(mobile.trim(), pin.trim());
-        if (user) {
-            login(user);
-            router.push("/");
-        } else {
-            setError("Invalid mobile number or PIN.");
+        setIsLoading(true);
+
+
+        try {
+            const user = await authenticateUser(mobile.trim(), pin.trim());
+
+            if (user) {
+                login(user);
+                router.push("/");
+            } else {
+                setError("Invalid mobile number or PIN.");
+            }
+        } catch (err: any) {
+            console.error("[LOGIN] Error during authentication:", err);
+            setError(err.message || "An error occurred during login. Please try again.");
+        } finally {
+            setIsLoading(false);
         }
     };
 
     const handleSignup = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
+        setIsLoading(true);
+
         try {
             if (!name.trim()) {
                 setError("Name is required");
+                setIsLoading(false);
                 return;
             }
             if (!/^[0-9]{10,15}$/.test(mobile.trim())) {
-                setError("Enter a valid mobile number");
+                setError("Enter a valid mobile number (10-15 digits)");
+                setIsLoading(false);
                 return;
             }
             if (!/^[0-9]{4}$/.test(pin.trim())) {
-                setError("PIN must be 4 digits");
+                setError("PIN must be exactly 4 digits");
+                setIsLoading(false);
                 return;
             }
+
             const newUser = await createUser(name.trim(), mobile.trim(), pin.trim());
+
             login(newUser);
             router.push("/");
         } catch (e: any) {
-            setError(e.message || "Failed to create user");
+            console.error("[SIGNUP] Error during registration:", e);
+            setError(e.message || "Failed to create user. Please try again.");
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -103,9 +125,10 @@ export default function LoginPage() {
                     </div>
                     <button
                         type="submit"
-                        className="w-full rounded-lg bg-emerald-600 px-4 py-3 font-semibold text-white hover:bg-emerald-700"
+                        disabled={isLoading}
+                        className="w-full rounded-lg bg-emerald-600 px-4 py-3 font-semibold text-white hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
                     >
-                        {signupMode ? "Create Account" : "Login"}
+                        {isLoading ? "Loading..." : signupMode ? "Create Account" : "Login"}
                     </button>
                 </form>
                 <div className="mt-4 text-center text-sm">

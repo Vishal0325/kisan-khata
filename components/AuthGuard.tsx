@@ -10,15 +10,18 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
 
     useEffect(() => {
-        // if not logged in and not already on /login, redirect
-        if (!user && pathname !== "/login") {
-            router.push("/login");
+        // don't run while already on the login page with no user
+        if (!user) {
+            if (pathname !== "/login") {
+                router.push("/login");
+            }
+            return;
         }
-        // if logged in and on login page, go home
-        if (user && pathname === "/login") {
+        // user is present
+        if (pathname === "/login") {
             router.push("/");
         }
-    }, [user, pathname, router]);
+    }, [user, pathname]);
 
     // when user is null and path is not /login we could render nothing while redirect happens
     if (!user && pathname !== "/login") {
