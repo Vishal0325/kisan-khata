@@ -12,6 +12,7 @@ import { TransactionItem } from "@/components/TransactionItem";
 import { FarmerAvatar } from "@/components/FarmerAvatar";
 import { DownloadReportButton } from "@/components/DownloadReportButton";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
+import { DownloadBillButton } from "@/components/DownloadBillButton";
 
 function formatAmount(amount: number) {
   return `₹${amount.toLocaleString("en-IN")}`;
@@ -62,8 +63,9 @@ export default async function FarmerDetailPage({
               {farmer.village}
               {farmer.phone && ` • ${farmer.phone}`}
             </p>
-            <div className="mt-1">
+            <div className="mt-1 flex gap-2">
               <WhatsAppButton name={farmer.name} balance={pending} phone={farmer.phone} />
+              <DownloadBillButton person={{ name: farmer.name, phone: farmer.phone }} transactions={transactions} />
             </div>
             {farmer.aadhar_no && (
               <p className="mt-0.5 text-xs text-emerald-600/80">
