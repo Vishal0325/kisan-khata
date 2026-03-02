@@ -79,6 +79,29 @@ Your Kisan Khata app is now set up as a Progressive Web App (PWA) with the follo
 
 5. Use Chrome's "Install" feature (see Android steps above) to test full PWA experience
 
+## Icon Regeneration Script
+
+If you prefer a CLI solution instead of using online tools, a Node script is included to convert `icon.svg` into the required PNG files.
+
+```bash
+# run from workspace root
+npm run icons   # shortcut defined below
+```
+
+The script (`scripts/generate-pwa-icons.js`) resizes the SVG into 96×96, 192×192 and 512×512 PNGs along with maskable versions.
+
+Add the following `package.json` script if it's not already defined:
+
+```json
+"scripts": {
+  "dev": "next dev",
+  "build": "next build",
+  "start": "next start",
+  "lint": "eslint",
+  "icons": "node scripts/generate-pwa-icons.js"
+}
+```
+
 ## Online Status Detection
 
 The app automatically works offline with cached pages. To enhance offline experience in the future, you can:

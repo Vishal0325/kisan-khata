@@ -5,6 +5,7 @@ import Link from "next/link";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { LanguageProvider } from "@/components/LanguageProvider";
 import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
+import { PWAMetaTags } from "@/components/PWAMetaTags";
 import { Home, Users, Store } from "lucide-react";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -15,6 +16,7 @@ export const viewport: Viewport = {
   maximumScale: 1,
   userScalable: false,
   viewportFit: "cover",
+  themeColor: "#059669",
 };
 
 export const metadata: Metadata = {
@@ -40,7 +42,6 @@ export const metadata: Metadata = {
     icon: "/icon.svg",
     apple: "/icon.svg",
   },
-  themeColor: "#059669",
 };
 
 export default function RootLayout({
@@ -52,6 +53,7 @@ export default function RootLayout({
     <html lang="hi">
       <body className={`${inter.className} bg-gray-50 text-gray-900 min-h-screen pb-20`}>
         <ServiceWorkerRegistration />
+        <PWAMetaTags />
         <LanguageProvider>
           {/* Top Header */}
           <header className="sticky top-0 z-40 w-full border-b bg-white/80 backdrop-blur-md">

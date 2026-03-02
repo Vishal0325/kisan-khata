@@ -10,23 +10,54 @@
     "background_color": "#ffffff",
     "screenshots": [
         {
-            "src": "/icon.svg",
+            "src": "/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "form_factor": "narrow"
+        },
+        {
+            "src": "/icon-512x512.png",
             "sizes": "512x512",
-            "type": "image/svg+xml"
+            "type": "image/png",
+            "form_factor": "wide"
         }
     ],
     "icons": [
         {
-            "src": "/icon.svg",
-            "sizes": "any",
-            "type": "image/svg+xml",
-            "purpose": "any"
+            "src": "/icon-96x96.png",
+            "sizes": "96x96",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/icon-maskable-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/icon-maskable-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
         },
         {
             "src": "/icon.svg",
             "sizes": "any",
             "type": "image/svg+xml",
-            "purpose": "maskable"
+            "purpose": "any maskable"
         }
     ],
     "categories": [
@@ -41,9 +72,14 @@
             "url": "/farmers",
             "icons": [
                 {
-                    "src": "/icon.svg",
-                    "sizes": "any",
-                    "type": "image/svg+xml"
+                    "src": "/icon-96x96.png",
+                    "sizes": "96x96",
+                    "type": "image/png"
+                },
+                {
+                    "src": "/icon-192x192.png",
+                    "sizes": "192x192",
+                    "type": "image/png"
                 }
             ]
         },
@@ -54,9 +90,14 @@
             "url": "/vendors",
             "icons": [
                 {
-                    "src": "/icon.svg",
-                    "sizes": "any",
-                    "type": "image/svg+xml"
+                    "src": "/icon-96x96.png",
+                    "sizes": "96x96",
+                    "type": "image/png"
+                },
+                {
+                    "src": "/icon-192x192.png",
+                    "sizes": "192x192",
+                    "type": "image/png"
                 }
             ]
         }
