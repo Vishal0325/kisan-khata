@@ -2,10 +2,11 @@ import { getUsers } from "@/lib/queries";
 import { AddUserForm } from "@/components/AddUserForm";
 
 export default async function UsersPage() {
-    let users = [];
+    let users :  any[] = [];
     try {
         users = await getUsers();
-    } catch {
+    } catch (error) {
+        console.error("Error fetching users:", error);
         users = [];
     }
 
