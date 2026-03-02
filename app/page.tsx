@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { Suspense } from "react";
 import { Users, Store } from "lucide-react";
@@ -9,7 +11,6 @@ import { HeaderComponent } from "@/components/HeaderComponent";
 import { HeroSection, ActionCards } from "@/components/DashboardSections";
 
 // client-only helper to redirect if no session
-"use client";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
