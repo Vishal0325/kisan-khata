@@ -18,13 +18,23 @@ export function WhatsAppButton({ name, balance, phone }: WhatsAppButtonProps) {
     const message = `नमस्ते ${name}, किसान खाता (Kisan Khata) में आपका कुल बैलेंस ${rupee} है। - ${sender}`;
     const encoded = encodeURIComponent(message);
 
-    let href = "https://wa.me/";
+    // normalize phone number: remove all non-digits, prefix 91 if missing
+    let phoneParam = "";
     if (phone) {
-        // strip non-digits; whatsapp requires international format without +
-        const digits = phone.replace(/\D/g, "");
-        href += digits;
+        let digits = phone.replace(/\D/g, "");
+        if (!digits.startsWith("91")) {
+            // avoid adding if already international
+            digits = "91" + digits;
+        }
+        phoneParam = digits;
     }
-    href += `?text=${encoded}`;
+
+    // build URL using api.whatsapp.com/send
+    let href = "https://api.whatsapp.com/send?";
+    if (phoneParam) {
+        href += `phone=${phoneParam}&`;
+    }
+    href += `text=${encoded}`;
 
     return (
         <a
