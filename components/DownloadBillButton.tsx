@@ -66,7 +66,7 @@ export function DownloadBillButton({ person, transactions }: DownloadBillButtonP
 
         const finalY = (doc as any).lastAutoTable.finalY || 120;
         doc.setFontSize(10);
-        doc.text(`एント्री करने वाले का नाम: ${staffName}`, 40, finalY + 20);
+        doc.text(`एंट्री करने वाले का नाम: ${staffName}`, 40, finalY + 20);
         doc.text("धन्यवाद!", 40, finalY + 40);
 
         const fileName = `${person.name.replace(/\s+/g, "_")}_Bill.pdf`;
