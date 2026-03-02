@@ -1,8 +1,23 @@
+"use client";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
+function EnsureLogin() {
+    const router = useRouter();
+    useEffect(() => {
+        const stored = localStorage.getItem("kk_user");
+        if (!stored) {
+            router.push("/login");
+        }
+    }, [router]);
+    return null;
+}
+
 import { getUsers } from "@/lib/queries";
 import { AddUserForm } from "@/components/AddUserForm";
 
 export default async function UsersPage() {
-    let users :  any[] = [];
+    let users: any[] = [];
     try {
         users = await getUsers();
     } catch (error) {
@@ -12,6 +27,7 @@ export default async function UsersPage() {
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-white to-emerald-50/30">
+            <EnsureLogin />
             <main className="mx-auto max-w-2xl space-y-8 px-4 py-6 pb-24">
                 <AddUserForm />
 

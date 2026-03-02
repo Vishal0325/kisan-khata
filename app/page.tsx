@@ -8,6 +8,22 @@ import { FarmerSearch } from "@/components/FarmerSearch";
 import { HeaderComponent } from "@/components/HeaderComponent";
 import { HeroSection, ActionCards } from "@/components/DashboardSections";
 
+// client-only helper to redirect if no session
+"use client";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
+function EnsureLogin() {
+  const router = useRouter();
+  useEffect(() => {
+    const stored = localStorage.getItem("kk_user");
+    if (!stored) {
+      router.push("/login");
+    }
+  }, [router]);
+  return null;
+}
+
 function formatAmount(amount: number) {
   return `₹${amount.toLocaleString("en-IN")}`;
 }
@@ -35,6 +51,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-emerald-50/30">
+      <EnsureLogin />
       <HeaderComponent />
 
       <main className="mx-auto max-w-2xl px-4 py-6 pb-24">
