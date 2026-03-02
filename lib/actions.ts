@@ -99,7 +99,8 @@ export async function addTransaction(_prevState: any, formData: FormData) {
   const amountStr = formData.get("amount")?.toString();
   const note = formData.get("note")?.toString().trim() ?? "";
   const date = formData.get("date")?.toString() ?? new Date().toISOString().slice(0, 10);
-  const createdBy = formData.get("created_by_user_id")?.toString() ?? null;
+  // prefer user_id field (standardized)
+  const createdBy = formData.get("user_id")?.toString() ?? null;
 
   if (type !== "CREDIT" && type !== "DEBIT") return { error: "Invalid type" };
   const amount = parseFloat(amountStr ?? "0");
@@ -111,7 +112,7 @@ export async function addTransaction(_prevState: any, formData: FormData) {
     amount,
     note: note || null,
     date,
-    created_by_user_id: createdBy || undefined,
+    user_id: createdBy || undefined,
   });
 
   if (error) return { error: error.message };

@@ -42,7 +42,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 This project now includes a simple staff management and login system:
 
 1. A new `users` table stores `id`, `name`, `mobile_number` and a 4‑digit `pin`.
-2. Transactions record `created_by_user_id` so you can see who added an entry.
+2. Transactions record `user_id` so you can see who added an entry.
 3. Visit `/login` to authenticate with mobile number + PIN; user data is stored in `localStorage`.
 4. All application routes (dashboard, farmers, vendors, etc.) are protected and redirect to `/login` if not signed in.
 5. After logging in you can go to `/users` to add or view staff accounts.

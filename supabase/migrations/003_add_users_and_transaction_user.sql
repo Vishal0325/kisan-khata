@@ -14,7 +14,7 @@ ALTER TABLE users ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Allow all on users" ON users FOR ALL USING (true) WITH CHECK (true);
 
 -- add reference from transactions
-ALTER TABLE transactions ADD COLUMN IF NOT EXISTS created_by_user_id UUID REFERENCES users(id);
+ALTER TABLE transactions ADD COLUMN IF NOT EXISTS user_id UUID REFERENCES users(id);
 
 -- update existing policy on transactions to allow the new column
 -- (policy defined earlier in schema.sql already permitted ALL, no change needed)

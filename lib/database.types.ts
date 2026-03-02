@@ -71,7 +71,7 @@ export interface Database {
           amount: number;
           note: string | null;
           date: string;
-          created_by_user_id: string | null;
+          user_id: string | null;
           created_at: string;
         };
         Insert: {
@@ -81,7 +81,7 @@ export interface Database {
           amount: number;
           note?: string | null;
           date: string;
-          created_by_user_id?: string | null;
+          user_id?: string | null;
           created_at?: string;
         };
         Update: {
@@ -91,7 +91,7 @@ export interface Database {
           amount?: number;
           note?: string | null;
           date?: string;
-          created_by_user_id?: string | null;
+          user_id?: string | null;
           created_at?: string;
         };
       };

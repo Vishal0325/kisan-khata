@@ -132,15 +132,41 @@ export async function getFarmerTransactions(
   const supabase = getSupabase();
   if (!supabase) return [];
 
-  // join with users to retrieve the name of the creator
-  const { data, error } = await supabase
+  // fetch transactions first
+  const { data: txns, error: txError } = await supabase
     .from("transactions")
-    .select(`*, created_by:users(name)`)
+    .select("*")
     .eq("farmer_id", farmerId)
     .order("date", { ascending: false });
 
-  if (error) throw new Error(`Failed to fetch transactions: ${error.message}`);
-  return (data ?? []) as (Transaction & { created_by?: { name: string } | null })[];
+  if (txError) throw new Error(`Failed to fetch transactions: ${txError.message}`);
+
+  const transactions = (txns ?? []) as Transaction[];
+
+  // collect user ids from user_id
+  const userIds = Array.from(new Set(transactions.map((t) => (t as any).user_id).filter(Boolean)));
+
+  let usersMap: Record<string, { name: string }> = {};
+  if (userIds.length > 0) {
+    const { data: users, error: userError } = await supabase
+      .from("users")
+      .select("id, name")
+      .in("id", userIds);
+    if (!userError && users) {
+      for (const u of users as { id: string; name: string }[]) {
+        usersMap[u.id] = { name: u.name };
+      }
+    }
+  }
+
+  // attach creator info where available
+  return transactions.map((t) => {
+    const uid = (t as any).user_id ?? null;
+    return {
+      ...(t as any),
+      created_by: uid ? usersMap[uid] ?? null : null,
+    } as Transaction & { created_by?: { name: string } | null };
+  });
 }
 
 export function getFarmerBalance(transactions: Transaction[]) {
