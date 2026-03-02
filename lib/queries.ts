@@ -338,14 +338,41 @@ export async function getVendorTransactions(
   const supabase = getSupabase();
   if (!supabase) return [];
 
-  const { data, error } = await supabase
+  // fetch transactions
+  const { data: txns, error: txError } = await supabase
     .from("vendor_transactions")
     .select("*")
     .eq("vendor_id", vendorId)
     .order("date", { ascending: false });
 
-  if (error) throw new Error(`Failed to fetch vendor transactions: ${error.message}`);
-  return data ?? [];
+  if (txError) throw new Error(`Failed to fetch vendor transactions: ${txError.message}`);
+
+  const transactions = (txns ?? []) as VendorTransaction[];
+
+  // collect user_ids (if vendor_transactions have user_id)
+  const userIds = Array.from(new Set(transactions.map((t) => (t as any).user_id).filter(Boolean)));
+
+  let usersMap: Record<string, { name: string }> = {};
+  if (userIds.length > 0) {
+    const { data: users, error: userError } = await supabase
+      .from("users")
+      .select("id, name")
+      .in("id", userIds);
+    if (!userError && users) {
+      for (const u of users as { id: string; name: string }[]) {
+        usersMap[u.id] = { name: u.name };
+      }
+    }
+  }
+
+  // attach created_by where available
+  return transactions.map((t) => {
+    const uid = (t as any).user_id ?? null;
+    return {
+      ...(t as any),
+      created_by: uid ? usersMap[uid] ?? null : null,
+    } as VendorTransaction & { created_by?: { name: string } | null };
+  });
 }
 
 export function getVendorBalance(transactions: VendorTransaction[]) {

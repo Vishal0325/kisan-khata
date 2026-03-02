@@ -14,6 +14,7 @@ interface VendorTransaction {
     amount: number;
     note: string | null;
     date: string;
+    created_by?: { name: string } | null;
 }
 
 export function VendorTransactionItem({
@@ -41,8 +42,7 @@ export function VendorTransactionItem({
                         await editFormAction(formData);
                         setIsEditing(false);
                     }}
-                    className="z-10 w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl border border-emerald-100"
-                >
+                    className="z-10 w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl border border-emerald-100">
                     <div className="flex items-center justify-between mb-6">
                         <h3 className="text-xl font-bold text-emerald-900">हिसाब सुधारें</h3>
                         <button type="button" onClick={() => setIsEditing(false)} className="text-gray-400 hover:text-gray-600">
@@ -89,7 +89,7 @@ export function VendorTransactionItem({
                         </div>
                     </div>
                 </form>
-            </div>
+            </div >
         );
     }
 
