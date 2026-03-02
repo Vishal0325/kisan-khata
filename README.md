@@ -34,3 +34,19 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+---
+
+## Multi‑User / Staff Support
+
+This project now includes a simple staff management and login system:
+
+1. A new `users` table stores `id`, `name`, `mobile_number` and a 4‑digit `pin`.
+2. Transactions record `created_by_user_id` so you can see who added an entry.
+3. Visit `/login` to authenticate with mobile number + PIN; user data is stored in `localStorage`.
+4. All application routes (dashboard, farmers, vendors, etc.) are protected and redirect to `/login` if not signed in.
+5. After logging in you can go to `/users` to add or view staff accounts.
+6. An example migration file `supabase/migrations/003_add_users_and_transaction_user.sql` and updates to `supabase/schema.sql` show the schema changes.
+
+Be sure to run the provided migration or apply the SQL in your Supabase project before using the new features.
+

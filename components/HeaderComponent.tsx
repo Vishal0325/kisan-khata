@@ -3,10 +3,20 @@
 import { Users } from "lucide-react";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { useLanguage } from "@/components/LanguageProvider";
+import { useAuth } from "@/components/AuthProvider";
+import { useRouter } from "next/navigation";
 import { t } from "@/lib/translations";
 
 export function HeaderComponent() {
     const { language } = useLanguage();
+
+    const { user, logout } = useAuth();
+    const router = useRouter();
+
+    const handleLogout = () => {
+        logout();
+        router.push("/login");
+    };
 
     return (
         <header className="border-b border-emerald-100 bg-white/80 backdrop-blur-sm">
@@ -23,7 +33,25 @@ export function HeaderComponent() {
                             </p>
                         </div>
                     </div>
-                    <LanguageSelector />
+                    <div className="flex items-center gap-4">
+                        <LanguageSelector />
+                        {user && (
+                            <>
+                                <a href="/users" className="text-sm text-emerald-600 hover:underline">
+                                    Staff
+                                </a>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-sm text-gray-700">{user.name}</span>
+                                    <button
+                                        onClick={handleLogout}
+                                        className="text-sm text-red-600 hover:underline"
+                                    >
+                                        Logout
+                                    </button>
+                                </div>
+                            </>
+                        )}
+                    </div>
                 </div>
             </div>
         </header>

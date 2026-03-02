@@ -99,6 +99,7 @@ export async function addTransaction(_prevState: any, formData: FormData) {
   const amountStr = formData.get("amount")?.toString();
   const note = formData.get("note")?.toString().trim() ?? "";
   const date = formData.get("date")?.toString() ?? new Date().toISOString().slice(0, 10);
+  const createdBy = formData.get("created_by_user_id")?.toString() ?? null;
 
   if (type !== "CREDIT" && type !== "DEBIT") return { error: "Invalid type" };
   const amount = parseFloat(amountStr ?? "0");
@@ -110,6 +111,7 @@ export async function addTransaction(_prevState: any, formData: FormData) {
     amount,
     note: note || null,
     date,
+    created_by_user_id: createdBy || undefined,
   });
 
   if (error) return { error: error.message };
@@ -145,6 +147,31 @@ export async function deleteTransactionAction(formData: FormData) {
   await deleteTransaction(transactionId);
   revalidatePath(`/farmers/${farmerId}`);
   revalidatePath("/");
+}
+
+// --- USER ACTIONS ---
+
+export async function addUserAction(_prevState: any, formData: FormData) {
+  const supabase = getSupabase();
+  if (!supabase) return { error: "Database not configured" };
+
+  const name = formData.get("name")?.toString().trim();
+  const mobile = formData.get("mobile_number")?.toString().trim();
+  const pin = formData.get("pin")?.toString().trim() ?? "";
+
+  if (!name) return { error: "Name is required" };
+  if (!mobile) return { error: "Mobile number is required" };
+  if (!/^[0-9]{4}$/.test(pin)) return { error: "PIN must be 4 digits" };
+
+  const { error } = await supabase.from("users").insert({
+    name,
+    mobile_number: mobile,
+    pin,
+  });
+
+  if (error) return { error: error.message };
+  revalidatePath("/users");
+  redirect("/users");
 }
 
 // --- VENDOR ACTIONS ---

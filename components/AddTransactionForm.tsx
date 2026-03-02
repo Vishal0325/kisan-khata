@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { useAuth } from "./AuthProvider";
 import { addTransaction } from "@/lib/actions";
 
 interface AddTransactionFormProps {
@@ -10,6 +11,7 @@ interface AddTransactionFormProps {
 export function AddTransactionForm({ farmerId }: AddTransactionFormProps) {
   const [state, formAction] = useActionState(addTransaction, null);
   const today = new Date().toISOString().slice(0, 10);
+  const { user } = useAuth();
 
   return (
     <form
@@ -17,6 +19,7 @@ export function AddTransactionForm({ farmerId }: AddTransactionFormProps) {
       className="rounded-xl border-2 border-emerald-200 bg-white p-5 shadow-sm"
     >
       <input type="hidden" name="farmer_id" value={farmerId} />
+      {user && <input type="hidden" name="created_by_user_id" value={user.id} />}
 
       <h3 className="mb-4 text-lg font-semibold text-emerald-900">
         Add Transaction

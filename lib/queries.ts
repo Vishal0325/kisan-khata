@@ -7,6 +7,8 @@ type Transaction = Database["public"]["Tables"]["transactions"]["Row"];
 type Vendor = Database["public"]["Tables"]["vendors"]["Row"];
 type VendorTransaction = Database["public"]["Tables"]["vendor_transactions"]["Row"];
 
+export type User = Database["public"]["Tables"]["users"]["Row"];
+
 export async function getSummaryStats() {
   const supabase = getSupabase();
   if (!supabase) {
@@ -126,18 +128,19 @@ export async function getFarmerById(id: string): Promise<Farmer | null> {
 
 export async function getFarmerTransactions(
   farmerId: string
-): Promise<Transaction[]> {
+): Promise<(Transaction & { created_by?: { name: string } | null })[]> {
   const supabase = getSupabase();
   if (!supabase) return [];
 
+  // join with users to retrieve the name of the creator
   const { data, error } = await supabase
     .from("transactions")
-    .select("*")
+    .select(`*, created_by:users(name)`)
     .eq("farmer_id", farmerId)
     .order("date", { ascending: false });
 
   if (error) throw new Error(`Failed to fetch transactions: ${error.message}`);
-  return data ?? [];
+  return (data ?? []) as (Transaction & { created_by?: { name: string } | null })[];
 }
 
 export function getFarmerBalance(transactions: Transaction[]) {
@@ -345,7 +348,55 @@ export async function updateVendorTransaction(
 
   if (error) throw new Error(`Failed to update vendor transaction: ${error.message}`);
 }
+// ------------------ user helpers ------------------
 
+export async function getUsers(): Promise<User[]> {
+  const supabase = getSupabase();
+  if (!supabase) return [];
+  const { data, error } = await supabase.from("users").select("*").order("name");
+  if (error) throw new Error(`Failed to fetch users: ${error.message}`);
+  return data ?? [];
+}
+
+export async function getUserById(id: string): Promise<User | null> {
+  const supabase = getSupabase();
+  if (!supabase) return null;
+  const { data, error } = await supabase.from("users").select("*").eq("id", id).single();
+  if (error || !data) return null;
+  return data as User;
+}
+
+export async function createUser(
+  name: string,
+  mobile_number: string,
+  pin: string
+): Promise<User> {
+  const supabase = getSupabase();
+  if (!supabase) throw new Error("Database not configured");
+  const { data, error } = await supabase
+    .from("users")
+    .insert({ name, mobile_number, pin })
+    .select("*")
+    .single();
+  if (error) throw new Error(`Failed to create user: ${error.message}`);
+  return data as User;
+}
+
+export async function authenticateUser(
+  mobile_number: string,
+  pin: string
+): Promise<User | null> {
+  const supabase = getSupabase();
+  if (!supabase) return null;
+  const { data, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("mobile_number", mobile_number)
+    .eq("pin", pin)
+    .single();
+  if (error) return null;
+  return data as User;
+}
 export async function deleteVendorTransaction(id: string) {
   const supabase = getSupabase();
   if (!supabase) throw new Error("Database not configured");

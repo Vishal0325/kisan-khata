@@ -11,6 +11,29 @@ export type TransactionType = "DEBIT" | "CREDIT";
 export interface Database {
   public: {
     Tables: {
+      users: {
+        Row: {
+          id: string;
+          name: string;
+          mobile_number: string;
+          pin: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          name: string;
+          mobile_number: string;
+          pin: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          name?: string;
+          mobile_number?: string;
+          pin?: string;
+          created_at?: string;
+        };
+      };
       farmers: {
         Row: {
           id: string;
@@ -48,6 +71,7 @@ export interface Database {
           amount: number;
           note: string | null;
           date: string;
+          created_by_user_id: string | null;
           created_at: string;
         };
         Insert: {
@@ -57,6 +81,7 @@ export interface Database {
           amount: number;
           note?: string | null;
           date: string;
+          created_by_user_id?: string | null;
           created_at?: string;
         };
         Update: {
@@ -66,6 +91,7 @@ export interface Database {
           amount?: number;
           note?: string | null;
           date?: string;
+          created_by_user_id?: string | null;
           created_at?: string;
         };
       };

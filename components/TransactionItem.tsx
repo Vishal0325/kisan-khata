@@ -11,6 +11,7 @@ export interface Transaction {
   amount: number;
   note: string | null;
   date: string;
+  created_by?: { name: string } | null;
 }
 
 interface TransactionItemProps {
@@ -25,9 +26,9 @@ export function TransactionItem({ transaction }: TransactionItemProps) {
   const [editState, editFormAction, isPending] = useActionState(
     async (prevState: any, formData: FormData) => {
       const result = await updateTransactionAction(
-        transaction.id, 
-        transaction.farmer_id, 
-        prevState, 
+        transaction.id,
+        transaction.farmer_id,
+        prevState,
         formData
       );
       if (!result?.error) {
@@ -132,6 +133,9 @@ export function TransactionItem({ transaction }: TransactionItemProps) {
             {new Date(transaction.date).toLocaleDateString("en-IN", { day: 'numeric', month: 'short', year: 'numeric' })}
             {transaction.note && ` • ${transaction.note}`}
           </p>
+          {transaction.created_by?.name && (
+            <p className="mt-1 text-xs text-gray-600">Added by: {transaction.created_by.name}</p>
+          )}
         </div>
       </div>
       <div className="flex items-center gap-3">
