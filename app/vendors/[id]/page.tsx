@@ -5,6 +5,7 @@ import { AddVendorTransactionForm } from "@/components/AddVendorTransactionForm"
 import { VendorEditForm } from "@/components/VendorEditForm";
 import { DeleteVendorButton } from "@/components/DeleteVendorButton";
 import { VendorTransactionItem } from "@/components/VendorTransactionItem";
+import { WhatsAppButton } from "@/components/WhatsAppButton";
 
 function formatAmount(amount: number) {
     return `₹${amount.toLocaleString("en-IN")}`;
@@ -35,6 +36,9 @@ export default async function VendorDetailPage({ params }: { params: Promise<{ i
                     <div className="min-w-0 flex-1">
                         <h1 className="truncate text-xl font-bold text-emerald-800">{vendor.name}</h1>
                         <p className="text-sm text-emerald-700/80">{vendor.company_name}{vendor.phone && ` • ${vendor.phone}`}</p>
+                        <div className="mt-1">
+                            <WhatsAppButton name={vendor.name} balance={pending} phone={vendor.phone} />
+                        </div>
                     </div>
                 </div>
             </header>

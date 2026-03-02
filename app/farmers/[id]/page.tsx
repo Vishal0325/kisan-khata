@@ -11,6 +11,7 @@ import { DeleteFarmerButton } from "@/components/DeleteFarmerButton";
 import { TransactionItem } from "@/components/TransactionItem";
 import { FarmerAvatar } from "@/components/FarmerAvatar";
 import { DownloadReportButton } from "@/components/DownloadReportButton";
+import { WhatsAppButton } from "@/components/WhatsAppButton";
 
 function formatAmount(amount: number) {
   return `₹${amount.toLocaleString("en-IN")}`;
@@ -61,6 +62,9 @@ export default async function FarmerDetailPage({
               {farmer.village}
               {farmer.phone && ` • ${farmer.phone}`}
             </p>
+            <div className="mt-1">
+              <WhatsAppButton name={farmer.name} balance={pending} phone={farmer.phone} />
+            </div>
             {farmer.aadhar_no && (
               <p className="mt-0.5 text-xs text-emerald-600/80">
                 Aadhar: {farmer.aadhar_no}
